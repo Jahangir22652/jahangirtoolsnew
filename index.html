@@ -4,58 +4,168 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Jahangir Tools Login</title>
+
+<!-- Import Poppins font -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+
 <style>
   body {
-    margin: 0; font-family: 'Courier New', monospace;
-    background: #010a13; color: #00ff00;
-    display: flex; justify-content: center; align-items: center;
-    height: 100vh; flex-direction: column;
+    margin: 0; 
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    background: #000814;
+    color: #00bfff;
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    min-height: 100vh; 
+    flex-direction: column;
+    text-shadow: 0 0 6px #00bfff88;
   }
-  #loginDiv, #adminDiv, #userDiv {
-    background: #001f2d;
+
+  #loginDiv {
+    background: #001f4d;
     padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 0 15px #00ff00aa;
-    width: 350px;
+    border-radius: 12px;
+    box-shadow: 0 0 20px #00bfffcc, inset 0 0 12px #0099eecc;
+    width: 360px;
     text-align: center;
     display: none;
   }
+
+  #adminDiv {
+    background: #001f4d;
+    padding: 20px 25px; /* Reduced padding for smaller admin panel */
+    border-radius: 12px;
+    box-shadow: 0 0 20px #00bfffcc, inset 0 0 12px #0099eecc;
+    width: 360px;
+    text-align: center;
+    display: none;
+  }
+
   input, button {
-    width: 100%; padding: 12px; margin: 10px 0;
-    background: #002b3a; border: 1px solid #00ff00;
-    color: #00ff00; border-radius: 5px; font-size: 16px;
+    width: 100%; 
+    padding: 14px; 
+    margin: 10px 0;
+    background: #003366; 
+    border: 1px solid #00bfff;
+    color: #00bfff; 
+    border-radius: 6px; 
+    font-size: 17px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    text-shadow: 0 0 5px #00bfff77;
+    transition: background 0.3s, border-color 0.3s;
   }
   button {
-    background: #00ff00; border:none; color:#001f2d; font-weight:bold; cursor:pointer;
-    transition: background 0.3s;
+    background: #00bfff; 
+    border:none; 
+    color:#001a33; 
+    font-weight: 600; 
+    cursor:pointer;
+    box-shadow: 0 0 10px #00bfffcc;
   }
   button:hover {
-    background: #00cc00;
+    background: #0099dd;
+    box-shadow: 0 0 15px #0099ddcc;
   }
   #logoutBtn, #logoutBtnUser {
-    background: #ff3300;
+    background: #cc3300;
     margin-top: 20px;
+    box-shadow: 0 0 8px #cc3300cc;
   }
-  #toolsList, #userToolsList {
-    margin-top: 20px; max-height: 200px; overflow-y: auto; text-align: left; border-top: 1px solid #00ff00; padding-top: 10px;
+  #toolsList {
+    margin-top: 20px; 
+    max-height: 210px; 
+    overflow-y: auto; 
+    text-align: left;
+    border-top: 1px solid #00bfff; 
+    padding-top: 12px;
   }
   .toolItem {
-    display: flex; justify-content: space-between; margin-bottom: 10px;
-    background: #003b4a; padding: 8px 10px; border-radius: 5px;
+    display: flex; 
+    justify-content: space-between; 
+    margin-bottom: 12px;
+    background: #004080; 
+    padding: 9px 14px; 
+    border-radius: 7px;
+    box-shadow: 0 0 9px #0099ddcc;
   }
   .toolLink {
-    color: #00cc00; text-decoration: none; font-weight: bold;
+    color: #00d0ff; 
+    text-decoration: none; 
+    font-weight: 600;
+    text-shadow: 0 0 7px #00d0ffbb;
   }
   .deleteBtn {
-    background: #ff3300; border:none; color:white; padding: 5px 10px; border-radius: 3px; cursor: pointer;
+    background: #cc3300; 
+    border:none; 
+    color:white; 
+    padding: 7px 14px; 
+    border-radius: 4px; 
+    cursor: pointer;
+    font-weight: 600;
+    box-shadow: 0 0 7px #cc3300cc;
   }
   #message, #loginMessage, #addUserMessage {
-    margin-top: 10px; height: 20px; font-weight: bold;
+    margin-top: 10px; 
+    height: 22px; 
+    font-weight: 600;
+    text-shadow: 0 0 4px #00bfff88;
   }
   #usernameDisplay {
+    font-size: 22px;
+    font-weight: 600;
+    margin: 22px 0;
+    text-align: center;
+    text-shadow: 0 0 8px #00bfffcc;
+  }
+
+  /* User Page Styling */
+  #userDiv {
+    display: none;
+    width: 100%;
+    max-width: 1000px;
+    padding: 22px;
+    text-align: center;
+  }
+  #userToolsList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    justify-content: center;
+    padding: 12px;
+    margin-top: 12px;
+  }
+  .userToolBtn {
+    background: #004080;
+    color: #00bfff;
+    border: 1px solid #00bfff;
+    border-radius: 10px;
+    padding: 18px 30px;
+    font-weight: 600;
     font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 15px;
+    text-decoration: none;
+    display: inline-block;
+    white-space: nowrap;
+    box-shadow: 0 0 15px #00bfffcc;
+    transition: background 0.3s, box-shadow 0.3s;
+  }
+  .userToolBtn:hover {
+    background: #007acc;
+    box-shadow: 0 0 25px #00dfffcc, 0 0 35px #00dfffcc;
+  }
+
+  @media (max-width: 600px) {
+    #userToolsList {
+      flex-direction: column;
+      align-items: center;
+      overflow-x: unset;
+    }
+    .userToolBtn {
+      width: 100%;
+      max-width: 360px;
+    }
   }
 </style>
 
@@ -63,7 +173,6 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-
 </head>
 <body>
 
@@ -86,7 +195,7 @@
 
   <div id="toolsList"></div>
 
-  <hr style="border-color:#00ff00; margin: 20px 0;">
+  <hr style="border-color:#00bfff; margin: 20px 0;">
 
   <h3>Add User</h3>
   <input type="email" id="newUserEmail" placeholder="User Email" />
@@ -143,32 +252,37 @@
 
   const usernameDisplay = document.getElementById('usernameDisplay');
 
+  // Show login page initially
+  loginDiv.style.display = 'block';
+
   loginBtn.addEventListener('click', () => {
     const email = emailInput.value.trim();
     const password = passwordInput.value.trim();
     loginMessage.textContent = '';
 
     if (!email || !password) {
-      loginMessage.style.color = 'red';
+      loginMessage.style.color = '#cc3300';
       loginMessage.textContent = 'Please enter email and password.';
       return;
     }
 
+    // Admin login check (hardcoded)
     if(email === 'admin@jahangir.com' && password === 'admin1234') {
-      loginMessage.style.color = 'green';
+      loginMessage.style.color = '#00bfff';
       loginMessage.textContent = 'Admin login successful.';
       showAdminPanel();
       return;
     }
 
+    // Firebase user login
     auth.signInWithEmailAndPassword(email, password)
       .then(userCredential => {
-        loginMessage.style.color = 'green';
+        loginMessage.style.color = '#00bfff';
         loginMessage.textContent = 'User login successful.';
         showUserPanel(userCredential.user);
       })
       .catch(error => {
-        loginMessage.style.color = 'red';
+        loginMessage.style.color = '#cc3300';
         loginMessage.textContent = error.message;
       });
   });
@@ -193,105 +307,89 @@
     const link = toolLinkInput.value.trim();
 
     if(!name || !link){
-      messageDiv.style.color = 'red';
-      messageDiv.textContent = 'Please fill both fields.';
+      messageDiv.style.color = '#cc3300';
+      messageDiv.textContent = 'Please enter tool name and URL.';
       return;
     }
 
     db.collection('tools').add({ name, link })
       .then(() => {
-        messageDiv.style.color = 'green';
-        messageDiv.textContent = 'Tool added successfully.';
+        messageDiv.style.color = '#00bfff';
+        messageDiv.textContent = 'Tool added successfully!';
         toolNameInput.value = '';
         toolLinkInput.value = '';
         loadToolsAdmin();
       })
-      .catch(() => {
-        messageDiv.style.color = 'red';
-        messageDiv.textContent = 'Error adding tool.';
+      .catch(error => {
+        messageDiv.style.color = '#cc3300';
+        messageDiv.textContent = error.message;
       });
   });
 
   function loadToolsAdmin() {
-    toolsListDiv.innerHTML = 'Loading...';
+    toolsListDiv.innerHTML = 'Loading tools...';
     db.collection('tools').get()
       .then(snapshot => {
+        if (snapshot.empty) {
+          toolsListDiv.innerHTML = 'No tools available.';
+          return;
+        }
         toolsListDiv.innerHTML = '';
-        if(snapshot.empty){
-          toolsListDiv.textContent = 'No tools added yet.';
-          return;
-        }
         snapshot.forEach(doc => {
           const data = doc.data();
-          const div = document.createElement('div');
-          div.className = 'toolItem';
-          div.innerHTML = `<a href="${data.link}" target="_blank" class="toolLink">${data.name}</a> 
-          <button class="deleteBtn" onclick="deleteTool('${doc.id}')">Delete</button>`;
-          toolsListDiv.appendChild(div);
+          const toolItem = document.createElement('div');
+          toolItem.className = 'toolItem';
+          toolItem.innerHTML = `
+            <a href="${data.link}" class="toolLink" target="_blank">${data.name}</a>
+            <button class="deleteBtn" data-id="${doc.id}">Delete</button>
+          `;
+          toolsListDiv.appendChild(toolItem);
         });
-      });
-  }
 
-  function loadToolsUser() {
-    userToolsListDiv.innerHTML = 'Loading...';
-    db.collection('tools').get()
-      .then(snapshot => {
-        userToolsListDiv.innerHTML = '';
-        if(snapshot.empty){
-          userToolsListDiv.textContent = 'No tools available.';
-          return;
-        }
-        snapshot.forEach(doc => {
-          const data = doc.data();
-          const div = document.createElement('div');
-          div.className = 'toolItem';
-          div.innerHTML = `<a href="${data.link}" target="_blank" class="toolLink">${data.name}</a>`;
-          userToolsListDiv.appendChild(div);
+        // Attach delete event listeners
+        const deleteBtns = document.querySelectorAll('.deleteBtn');
+        deleteBtns.forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-id');
+            db.collection('tools').doc(id).delete()
+              .then(() => loadToolsAdmin());
+          });
         });
+      })
+      .catch(error => {
+        toolsListDiv.innerHTML = `Error: ${error.message}`;
       });
   }
 
-  function deleteTool(id){
-    if(confirm('Are you sure to delete this tool?')){
-      db.collection('tools').doc(id).delete()
-      .then(() => {
-        loadToolsAdmin();
-      });
-    }
-  }
-  window.deleteTool = deleteTool;
-
-  // Add new user by admin
   addUserBtn.addEventListener('click', () => {
     const email = newUserEmailInput.value.trim();
     const password = newUserPasswordInput.value.trim();
-    addUserMessage.textContent = '';
 
     if(!email || !password){
-      addUserMessage.style.color = 'red';
-      addUserMessage.textContent = 'Please enter email and password.';
+      addUserMessage.style.color = '#cc3300';
+      addUserMessage.textContent = 'Please enter email and password for new user.';
       return;
     }
 
-    // Admin cannot create user by default via client SDK due to security rules,
-    // but for demo, we create user with Firebase auth client SDK:
     auth.createUserWithEmailAndPassword(email, password)
       .then(() => {
-        addUserMessage.style.color = 'green';
-        addUserMessage.textContent = 'User added successfully.';
+        addUserMessage.style.color = '#00bfff';
+        addUserMessage.textContent = 'User added successfully!';
         newUserEmailInput.value = '';
         newUserPasswordInput.value = '';
       })
       .catch(error => {
-        addUserMessage.style.color = 'red';
+        addUserMessage.style.color = '#cc3300';
         addUserMessage.textContent = error.message;
       });
   });
 
   logoutBtn.addEventListener('click', () => {
-    adminDiv.style.display = 'none';
-    loginDiv.style.display = 'block';
-    loginMessage.textContent = '';
+    auth.signOut().then(() => {
+      adminDiv.style.display = 'none';
+      loginDiv.style.display = 'block';
+      loginMessage.textContent = '';
+    });
   });
 
   logoutBtnUser.addEventListener('click', () => {
@@ -302,19 +400,32 @@
     });
   });
 
-  auth.onAuthStateChanged(user => {
-    if(user){
-      showUserPanel(user);
-    } else {
-      loginDiv.style.display = 'block';
-    }
-  });
+  function loadToolsUser() {
+    userToolsListDiv.innerHTML = 'Loading tools...';
+    db.collection('tools').get()
+      .then(snapshot => {
+        if (snapshot.empty) {
+          userToolsListDiv.innerHTML = 'No tools available.';
+          return;
+        }
+        userToolsListDiv.innerHTML = '';
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const a = document.createElement('a');
+          a.href = data.link;
+          a.className = 'userToolBtn';
+          a.target = '_blank';
+          a.textContent = data.name;
+          userToolsListDiv.appendChild(a);
+        });
+      })
+      .catch(error => {
+        userToolsListDiv.innerHTML = `Error: ${error.message}`;
+      });
+  }
 
-  // Display username without domain part
-  function displayUsername(email){
-    if(!email) return;
-    const name = email.split('@')[0];
-    usernameDisplay.textContent = `Welcome, ${name}`;
+  function displayUsername(email) {
+    usernameDisplay.textContent = `Welcome, ${email}`;
   }
 </script>
 
