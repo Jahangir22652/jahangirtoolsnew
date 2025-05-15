@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Jahangir Tools Login</title>
+<style>
+  body {
+    margin: 0; font-family: 'Courier New', monospace;
+    background: #010a13; color: #00ff00;
+    display: flex; justify-content: center; align-items: center;
+    height: 100vh; flex-direction: column;
+  }
+  #loginDiv, #adminDiv, #userDiv {
+    background: #001f2d;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px #00ff00aa;
+    width: 350px;
+    text-align: center;
+    display: none;
+  }
+  input, button {
+    width: 100%; padding: 12px; margin: 10px 0;
+    background: #002b3a; border: 1px solid #00ff00;
+    color: #00ff00; border-radius: 5px; font-size: 16px;
+  }
+  button {
+    background: #00ff00; border:none; color:#001f2d; font-weight:bold; cursor:pointer;
+    transition: background 0.3s;
+  }
+  button:hover {
+    background: #00cc00;
+  }
+  #logoutBtn, #logoutBtnUser {
+    background: #ff3300;
+    margin-top: 20px;
+  }
+  #toolsList, #userToolsList {
+    margin-top: 20px; max-height: 200px; overflow-y: auto; text-align: left; border-top: 1px solid #00ff00; padding-top: 10px;
+  }
+  .toolItem {
+    display: flex; justify-content: space-between; margin-bottom: 10px;
+    background: #003b4a; padding: 8px 10px; border-radius: 5px;
+  }
+  .toolLink {
+    color: #00cc00; text-decoration: none; font-weight: bold;
+  }
+  .deleteBtn {
+    background: #ff3300; border:none; color:white; padding: 5px 10px; border-radius: 3px; cursor: pointer;
+  }
+  #message, #loginMessage, #addUserMessage {
+    margin-top: 10px; height: 20px; font-weight: bold;
+  }
+  #usernameDisplay {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+</style>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+
+</head>
+<body>
+
+<div id="loginDiv">
+  <h2>Jahangir Tools Login</h2>
+  <input type="email" id="email" placeholder="Email" />
+  <input type="password" id="password" placeholder="Password" />
+  <button id="loginBtn">Login</button>
+  <div id="loginMessage"></div>
+</div>
+
+<div id="adminDiv">
+  <h2>Admin Panel</h2>
+
+  <h3>Add Tool</h3>
+  <input type="text" id="toolName" placeholder="Tool Name" />
+  <input type="text" id="toolLink" placeholder="Tool URL" />
+  <button id="addToolBtn">Add Tool</button>
+  <div id="message"></div>
+
+  <div id="toolsList"></div>
+
+  <hr style="border-color:#00ff00; margin: 20px 0;">
+
+  <h3>Add User</h3>
+  <input type="email" id="newUserEmail" placeholder="User Email" />
+  <input type="password" id="newUserPassword" placeholder="User Password" />
+  <button id="addUserBtn">Add User</button>
+  <div id="addUserMessage"></div>
+
+  <button id="logoutBtn">Logout</button>
+</div>
+
+<div id="userDiv">
+  <h2>User Dashboard</h2>
+  <div id="usernameDisplay">Welcome, User</div>
+  <div id="userToolsList">Loading tools...</div>
+  <button id="logoutBtnUser">Logout</button>
+</div>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyAFrJLKxY3hSl9FeVpoK1EeB6_05Tr1uS0",
+    authDomain: "jahangir-redeem.firebaseapp.com",
+    databaseURL: "https://jahangir-redeem-default-rtdb.firebaseio.com",
+    projectId: "jahangir-redeem",
+    storageBucket: "jahangir-redeem.appspot.com",
+    messagingSenderId: "794529772841",
+    appId: "1:794529772841:web:88e03f816d651cd180b338",
+    measurementId: "G-SPV3J3F32C"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+
+  const loginDiv = document.getElementById('loginDiv');
+  const adminDiv = document.getElementById('adminDiv');
+  const userDiv = document.getElementById('userDiv');
+  const emailInput = document.getElementById('email');
+  const passwordInput = document.getElementById('password');
+  const loginBtn = document.getElementById('loginBtn');
+  const loginMessage = document.getElementById('loginMessage');
+  const toolNameInput = document.getElementById('toolName');
+  const toolLinkInput = document.getElementById('toolLink');
+  const addToolBtn = document.getElementById('addToolBtn');
+  const messageDiv = document.getElementById('message');
+  const toolsListDiv = document.getElementById('toolsList');
+  const userToolsListDiv = document.getElementById('userToolsList');
+  const logoutBtn = document.getElementById('logoutBtn');
+  const logoutBtnUser = document.getElementById('logoutBtnUser');
+
+  const newUserEmailInput = document.getElementById('newUserEmail');
+  const newUserPasswordInput = document.getElementById('newUserPassword');
+  const addUserBtn = document.getElementById('addUserBtn');
+  const addUserMessage = document.getElementById('addUserMessage');
+
+  const usernameDisplay = document.getElementById('usernameDisplay');
+
+  loginBtn.addEventListener('click', () => {
+    const email = emailInput.value.trim();
+    const password = passwordInput.value.trim();
+    loginMessage.textContent = '';
+
+    if (!email || !password) {
+      loginMessage.style.color = 'red';
+      loginMessage.textContent = 'Please enter email and password.';
+      return;
+    }
+
+    if(email === 'admin@jahangir.com' && password === 'admin1234') {
+      loginMessage.style.color = 'green';
+      loginMessage.textContent = 'Admin login successful.';
+      showAdminPanel();
+      return;
+    }
+
+    auth.signInWithEmailAndPassword(email, password)
+      .then(userCredential => {
+        loginMessage.style.color = 'green';
+        loginMessage.textContent = 'User login successful.';
+        showUserPanel(userCredential.user);
+      })
+      .catch(error => {
+        loginMessage.style.color = 'red';
+        loginMessage.textContent = error.message;
+      });
+  });
+
+  function showAdminPanel() {
+    loginDiv.style.display = 'none';
+    userDiv.style.display = 'none';
+    adminDiv.style.display = 'block';
+    loadToolsAdmin();
+  }
+
+  function showUserPanel(user) {
+    loginDiv.style.display = 'none';
+    adminDiv.style.display = 'none';
+    userDiv.style.display = 'block';
+    loadToolsUser();
+    displayUsername(user.email);
+  }
+
+  addToolBtn.addEventListener('click', () => {
+    const name = toolNameInput.value.trim();
+    const link = toolLinkInput.value.trim();
+
+    if(!name || !link){
+      messageDiv.style.color = 'red';
+      messageDiv.textContent = 'Please fill both fields.';
+      return;
+    }
+
+    db.collection('tools').add({ name, link })
+      .then(() => {
+        messageDiv.style.color = 'green';
+        messageDiv.textContent = 'Tool added successfully.';
+        toolNameInput.value = '';
+        toolLinkInput.value = '';
+        loadToolsAdmin();
+      })
+      .catch(() => {
+        messageDiv.style.color = 'red';
+        messageDiv.textContent = 'Error adding tool.';
+      });
+  });
+
+  function loadToolsAdmin() {
+    toolsListDiv.innerHTML = 'Loading...';
+    db.collection('tools').get()
+      .then(snapshot => {
+        toolsListDiv.innerHTML = '';
+        if(snapshot.empty){
+          toolsListDiv.textContent = 'No tools added yet.';
+          return;
+        }
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const div = document.createElement('div');
+          div.className = 'toolItem';
+          div.innerHTML = `<a href="${data.link}" target="_blank" class="toolLink">${data.name}</a> 
+          <button class="deleteBtn" onclick="deleteTool('${doc.id}')">Delete</button>`;
+          toolsListDiv.appendChild(div);
+        });
+      });
+  }
+
+  function loadToolsUser() {
+    userToolsListDiv.innerHTML = 'Loading...';
+    db.collection('tools').get()
+      .then(snapshot => {
+        userToolsListDiv.innerHTML = '';
+        if(snapshot.empty){
+          userToolsListDiv.textContent = 'No tools available.';
+          return;
+        }
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const div = document.createElement('div');
+          div.className = 'toolItem';
+          div.innerHTML = `<a href="${data.link}" target="_blank" class="toolLink">${data.name}</a>`;
+          userToolsListDiv.appendChild(div);
+        });
+      });
+  }
+
+  function deleteTool(id){
+    if(confirm('Are you sure to delete this tool?')){
+      db.collection('tools').doc(id).delete()
+      .then(() => {
+        loadToolsAdmin();
+      });
+    }
+  }
+  window.deleteTool = deleteTool;
+
+  // Add new user by admin
+  addUserBtn.addEventListener('click', () => {
+    const email = newUserEmailInput.value.trim();
+    const password = newUserPasswordInput.value.trim();
+    addUserMessage.textContent = '';
+
+    if(!email || !password){
+      addUserMessage.style.color = 'red';
+      addUserMessage.textContent = 'Please enter email and password.';
+      return;
+    }
+
+    // Admin cannot create user by default via client SDK due to security rules,
+    // but for demo, we create user with Firebase auth client SDK:
+    auth.createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        addUserMessage.style.color = 'green';
+        addUserMessage.textContent = 'User added successfully.';
+        newUserEmailInput.value = '';
+        newUserPasswordInput.value = '';
+      })
+      .catch(error => {
+        addUserMessage.style.color = 'red';
+        addUserMessage.textContent = error.message;
+      });
+  });
+
+  logoutBtn.addEventListener('click', () => {
+    adminDiv.style.display = 'none';
+    loginDiv.style.display = 'block';
+    loginMessage.textContent = '';
+  });
+
+  logoutBtnUser.addEventListener('click', () => {
+    auth.signOut().then(() => {
+      userDiv.style.display = 'none';
+      loginDiv.style.display = 'block';
+      loginMessage.textContent = '';
+    });
+  });
+
+  auth.onAuthStateChanged(user => {
+    if(user){
+      showUserPanel(user);
+    } else {
+      loginDiv.style.display = 'block';
+    }
+  });
+
+  // Display username without domain part
+  function displayUsername(email){
+    if(!email) return;
+    const name = email.split('@')[0];
+    usernameDisplay.textContent = `Welcome, ${name}`;
+  }
+</script>
+
+</body>
+</html>
